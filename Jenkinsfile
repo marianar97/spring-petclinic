@@ -1,18 +1,16 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_NETWORK = 'dev_network' 
-        DOCKER_IMAGE = 'sandboxSpringPetClinic'
-        DOCKERFILE_PATH = 'sandbox_dockerfile'
-        def mvnHome = tool name: 'maven397', type: 'hudson.tasks.Maven$MavenInstallation'
+    agent any 
+    
+    tools{
+        jdk 'jdk17'
+        maven 'maven'
     }
-
-    stages{
+    
+     stages{
         
         stage("Git Checkout"){
             steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/rajeshmamuddu/Petclinic-project.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/marianar97/spring-petclinic'
             }
         }
         
@@ -27,14 +25,5 @@ pipeline {
                 sh "mvn test"
             }
         }
-    }
-
-    post {
-        success {
-            echo 'Build successful.'
-        }
-        failure {
-            echo 'Build Failure.'
-        }
-    }
+     }
 }
